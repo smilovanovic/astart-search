@@ -11,12 +11,17 @@ export class GameService {
 
   getH(n: string[]) {
     const tempN = [...n];
+    let result = 0;
     for (let i = 0; i < GameService.SOLUTION.length; i++) {
       const currentEl = tempN.shift();
-      if (currentEl === GameService.SOLUTION[i]) continue;
-      return tempN.indexOf(GameService.SOLUTION[i]);
+      if (currentEl === GameService.SOLUTION[i]) {
+        result -= Math.pow(10, i + 1);
+        continue;
+      }
+      result += tempN.indexOf(GameService.SOLUTION[i]);
+      return result;
     }
-    return 0;
+    return result;
   }
 
   getF(n: string[], g: number) {

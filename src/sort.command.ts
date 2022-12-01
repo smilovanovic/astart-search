@@ -16,6 +16,7 @@ export class SortCommand extends CommandRunner {
     super();
   }
 
+  // rrrggggbbbrb => 332 with H v1
   async run(passedParam: string[]): Promise<void> {
     const parsedBalls = this.parseBalls(passedParam[0]);
     if (!parsedBalls) {
