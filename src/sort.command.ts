@@ -1,4 +1,5 @@
 import { Command, CommandRunner } from 'nest-commander';
+import { GameService } from './game.service';
 
 @Command({
   name: 'sort',
@@ -11,16 +12,22 @@ import { Command, CommandRunner } from 'nest-commander';
   options: { isDefault: true },
 })
 export class SortCommand extends CommandRunner {
+  constructor(private gameService: GameService) {
+    super();
+  }
+
   async run(passedParam: string[]): Promise<void> {
-    if (!this.validateBalls(passedParam[0])) {
+    const parsedBalls = this.parseBalls(passedParam[0]);
+    if (!parsedBalls) {
       console.error(
         'Four balls of each color are required!\nExample: rbgggrrbbrgb',
       );
       return;
     }
+    console.log(this.gameService.astar(parsedBalls));
   }
 
-  validateBalls(balls: string) {
+  parseBalls(balls: string): string[] | null {
     const totals = {
       r: 0,
       b: 0,
@@ -28,9 +35,11 @@ export class SortCommand extends CommandRunner {
     };
 
     balls.split('').forEach((char) => {
-      if (totals[char]) totals[char]++;
+      if (totals[char] !== undefined) totals[char]++;
     });
 
-    return Object.values(totals).every((total) => total === 4);
+    return Object.values(totals).every((total) => total === 4)
+      ? balls.split('')
+      : null;
   }
 }
