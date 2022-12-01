@@ -52,6 +52,7 @@ export class GameService {
   }
 
   astar(n: string[]): { moves: string[]; closedStates: number } {
+    console.time('exec');
     const start: GameStateNode = {
       n,
       key: this.getKey(n),
@@ -80,6 +81,7 @@ export class GameService {
           curr = curr.parent;
         }
         ret.push(curr.key);
+        console.timeEnd('exec');
         return {
           moves: ret.reverse(),
           closedStates: Object.keys(closedList).length,
@@ -104,6 +106,7 @@ export class GameService {
       });
     }
 
+    console.timeEnd('exec');
     return {
       moves: [],
       closedStates: 0,
